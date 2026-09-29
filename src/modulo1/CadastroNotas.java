@@ -36,6 +36,22 @@ public class CadastroNotas {
                 if(qtd > 0){
                     System.out.println("Média: " + (soma / qtd));
                 }
+            }else if(opc == 4){
+                int aprovados = 0;
+                for(int j = 0; j < qtd; j++){
+                    if(notes[j] >= 6){
+                        System.out.println("Aluno Aprovado: " + names[j]);
+                        aprovados++;
+                    }else if (notes[j] == 5) {
+                        System.out.println("Aluno de Exame: " + names[j]);
+                    }else{
+                        System.out.println("Aluno Reprovado: " + names[j]);
+                    }
+                }System.out.println("Qtd de aprovados: " + aprovados);
+            }else if(opc == 5){
+                System.out.println("Exiting of system...");
+            }else{
+                System.out.println("Option invalid...");
             }
 
         }while(opc != 5);
