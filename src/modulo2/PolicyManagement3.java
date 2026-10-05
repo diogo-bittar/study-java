@@ -15,7 +15,7 @@ public class PolicyManagement3 {
         System.out.println("Policy Management 3\n");
 
         do {
-            System.out.print("1- Register policy\n2- List policies\n3- Total premium value\n4- Count policies above value\n5- Show existing categories\n6- Exit\nChoose an option: ");
+            System.out.print("1- Register policy\n2- List policies\n3- Total premium value\n4- Count policies above value\n5- Show existing categories\n6- Remove Policy\n7- Exit\nChoose an option: ");
             option = scanner.nextInt();
             scanner.nextLine();
 
@@ -33,12 +33,18 @@ public class PolicyManagement3 {
                 countAboveValue();
             } else if (option == 5) {
                 listExistingCategories();
-            } else if (option == 6) {
+            } else if(option == 6){
+                try{
+                    removePolicy();
+                }catch (valuePremiumException e){
+                    System.out.println(e.getMessage());
+                }
+            }else if (option == 7) {
                 System.out.println("Exiting system...");
             } else {
                 System.out.println("Invalid option...");
             }
-        } while (option != 6);
+        } while (option != 7);
     }
 
     static void registerPolicy(){
@@ -90,5 +96,15 @@ public class PolicyManagement3 {
         for (String category : categories) {
             System.out.println(category);
         }
+    }
+
+    static void removePolicy(){
+        System.out.print("Name of policy for remove: ");
+        String nameRemove = scanner.nextLine();
+
+        policies.removeIf(p -> p.getInsuredName().equals(nameRemove));
+        policiesByCategory.values().forEach(lista -> lista.removeIf(pol -> pol.getInsuredName().equals(nameRemove)));
+        policiesByCategory.entrySet().removeIf(entry -> entry.getValue().isEmpty());
+        System.out.println("Policy removed sucess!");
     }
 }
