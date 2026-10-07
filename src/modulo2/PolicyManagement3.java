@@ -10,6 +10,7 @@ public class PolicyManagement3 {
     static List<Policy3> policies = new ArrayList<>();
     static Map<String, List<Policy3>> policiesByCategory = new HashMap<>();
     static int option;
+    static Notificador notificador = new NotificadorSms();
 
     public static void main(String[] args) {
         System.out.println("Policy Management 3\n");
@@ -62,6 +63,7 @@ public class PolicyManagement3 {
 
         Policy3 newPolicy = new Policy3(insuredName, premiumValue, category);
         policies.add(newPolicy);
+        notificador.notificar("Policy add sucess", insuredName);
 
         if (!policiesByCategory.containsKey(category)) {
             policiesByCategory.put(category, new ArrayList<>());
@@ -105,6 +107,6 @@ public class PolicyManagement3 {
         policies.removeIf(p -> p.getInsuredName().equals(nameRemove));
         policiesByCategory.values().forEach(lista -> lista.removeIf(pol -> pol.getInsuredName().equals(nameRemove)));
         policiesByCategory.entrySet().removeIf(entry -> entry.getValue().isEmpty());
-        System.out.println("Policy removed sucess!");
+        notificador.notificar("Policy removed", nameRemove);
     }
 }
