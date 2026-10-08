@@ -16,7 +16,7 @@ public class PolicyManagement3 {
         System.out.println("Policy Management 3\n");
 
         do {
-            System.out.print("1- Register policy\n2- List policies\n3- Total premium value\n4- Count policies above value\n5- Show existing categories\n6- Remove Policy\n7- Exit\nChoose an option: ");
+            System.out.print("1- Register policy\n2- List policies\n3- Total premium value\n4- Count policies above value\n5- Show existing categories\n6- Remove Policy\n7- List of category\n8- Exit\nChoose an option: ");
             option = scanner.nextInt();
             scanner.nextLine();
 
@@ -40,12 +40,14 @@ public class PolicyManagement3 {
                 }catch (valuePremiumException e){
                     System.out.println(e.getMessage());
                 }
-            }else if (option == 7) {
+            }else if(option == 7){
+                listPoliciesByCategory();
+            }else if (option == 8) {
                 System.out.println("Exiting system...");
             } else {
                 System.out.println("Invalid option...");
             }
-        } while (option != 7);
+        } while (option != 8);
     }
 
     static void registerPolicy(){
@@ -104,9 +106,25 @@ public class PolicyManagement3 {
         System.out.print("Name of policy for remove: ");
         String nameRemove = scanner.nextLine();
 
-        policies.removeIf(p -> p.getInsuredName().equals(nameRemove));
-        policiesByCategory.values().forEach(lista -> lista.removeIf(pol -> pol.getInsuredName().equals(nameRemove)));
-        policiesByCategory.entrySet().removeIf(entry -> entry.getValue().isEmpty());
-        notificador.notificar("Policy removed", nameRemove);
+        boolean removed = policies.removeIf(p -> p.getInsuredName().equals(nameRemove));
+        if (removed) {
+            policiesByCategory.values().forEach(lista -> lista.removeIf(pol -> pol.getInsuredName().equals(nameRemove)));
+            policiesByCategory.entrySet().removeIf(entry -> entry.getValue().isEmpty());
+            notificador.notificar("Policy removed", nameRemove);
+        } else {
+            System.out.println("Insured not found...");
+        }
+    }
+
+    static void listPoliciesByCategory(){
+        System.out.print("Name of category: ");
+        String categoryName = scanner.nextLine();
+        if(policiesByCategory.containsKey(categoryName)){
+            for(Policy3 p : policiesByCategory.get(categoryName)){
+                System.out.println("Insured: " + p.getInsuredName() + " | Premium: " + p.getPremiumValue() + " | Category: " + p.getCategory());
+            }
+        }else{
+            System.out.println("Category invalid...");
+        }
     }
 }
