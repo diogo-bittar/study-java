@@ -1,12 +1,7 @@
 package modulo2;
 
 import java.util.*;
-import java.util.stream.*;
 
-
-/**
- *
- */
 public class PolicyManagement3 {
     static Scanner scanner = new Scanner(System.in);
     static List<Policy3> policies = new ArrayList<>();
@@ -26,7 +21,7 @@ public class PolicyManagement3 {
                 case 1:
                     try {
                         registerPolicy();
-                    } catch (valuePremiumException e) {
+                    } catch (ValuePremiumException e) {
                         System.out.println(e.getMessage());
                     }
                     break;
@@ -63,14 +58,14 @@ public class PolicyManagement3 {
         } while (option != 10);
     }
 
-    static void registerPolicy(){
+    static void registerPolicy() {
         System.out.print("Insured name: ");
         String insuredName = scanner.nextLine();
 
         System.out.print("Premium value: ");
         double premiumValue = Double.parseDouble(scanner.nextLine());
-        if(premiumValue <= 0){
-            throw new valuePremiumException("Value invalid...");
+        if (premiumValue <= 0) {
+            throw new ValuePremiumException("Value invalid...");
         }
 
         System.out.print("Policy category: ");
@@ -78,7 +73,7 @@ public class PolicyManagement3 {
 
         Policy3 newPolicy = new Policy3(insuredName, premiumValue, category);
         policies.add(newPolicy);
-        notificador.notificar("Policy add sucess", insuredName);
+        notificador.notificar("Policy added successfully", insuredName);
 
         if (!policiesByCategory.containsKey(category)) {
             policiesByCategory.put(category, new ArrayList<>());
@@ -94,7 +89,7 @@ public class PolicyManagement3 {
         double total = policies.stream().mapToDouble(p -> p.getPremiumValue()).sum();
         System.out.println("Total premium value: " + total);
     }
-//
+
     static void countAboveValue() {
         System.out.print("Cutoff value for search: ");
         double limitValue = Double.parseDouble(scanner.nextLine());
@@ -115,8 +110,8 @@ public class PolicyManagement3 {
         }
     }
 
-    static void removePolicy(){
-        System.out.print("Name of policy for remove: ");
+    static void removePolicy() {
+        System.out.print("Insured name to remove: ");
         String nameRemove = scanner.nextLine();
 
         boolean removed = policies.removeIf(p -> p.getInsuredName().equals(nameRemove));
@@ -129,23 +124,23 @@ public class PolicyManagement3 {
         }
     }
 
-    static void listPoliciesByCategory(){
+    static void listPoliciesByCategory() {
         System.out.print("Name of category: ");
         String categoryName = scanner.nextLine();
-        if(policiesByCategory.containsKey(categoryName)){
-            for(Policy3 p : policiesByCategory.get(categoryName)){
+        if (policiesByCategory.containsKey(categoryName)) {
+            for (Policy3 p : policiesByCategory.get(categoryName)) {
                 System.out.println("Insured: " + p.getInsuredName() + " | Premium: " + p.getPremiumValue() + " | Category: " + p.getCategory());
             }
-        }else{
+        } else {
             System.out.println("Category invalid...");
         }
     }
 
-    static void totalPremiumsByCategory(){
+    static void totalPremiumsByCategory() {
         Set<String> categories = policiesByCategory.keySet();
-        for (String category : categories){
+        for (String category : categories) {
             double total = 0;
-            for(Policy3 p : policiesByCategory.get(category)){
+            for (Policy3 p : policiesByCategory.get(category)) {
                 total += p.getPremiumValue();
             }
             System.out.println(category + ": " + total);
@@ -153,7 +148,7 @@ public class PolicyManagement3 {
     }
 
     static void categoryWithMostPolicies() {
-        double maiorTamanho = 0;
+        int maiorTamanho = 0;
         String categoryHigh = null;
 
         for (String category : policiesByCategory.keySet()) {
@@ -162,16 +157,12 @@ public class PolicyManagement3 {
             if (quantidade > maiorTamanho) {
                 maiorTamanho = quantidade;
                 categoryHigh = category;
-
             }
         }
         if (categoryHigh == null) {
             System.out.println("No policies registered.");
-
         } else {
-            System.out.println("Category with most policies: "
-                    + categoryHigh + " (" + maiorTamanho + ")");
+            System.out.println("Category with most policies: " + categoryHigh + " (" + maiorTamanho + ")");
         }
     }
-
 }
