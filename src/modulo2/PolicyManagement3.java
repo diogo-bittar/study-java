@@ -4,7 +4,9 @@ import java.util.*;
 import java.util.stream.*;
 
 
-
+/**
+ *
+ */
 public class PolicyManagement3 {
     static Scanner scanner = new Scanner(System.in);
     static List<Policy3> policies = new ArrayList<>();
@@ -16,38 +18,49 @@ public class PolicyManagement3 {
         System.out.println("Policy Management 3\n");
 
         do {
-            System.out.print("1- Register policy\n2- List policies\n3- Total premium value\n4- Count policies above value\n5- Show existing categories\n6- Remove Policy\n7- List of category\n8- Exit\nChoose an option: ");
+            System.out.print("1- Register policy\n2- List policies\n3- Total premium value\n4- Count policies above value\n5- Show existing categories\n6- Remove Policy\n7- List of category\n8- Total premiums by category\n9- Category with most policies\n10- Exit\nChoose an option: ");
             option = scanner.nextInt();
             scanner.nextLine();
 
-            if (option == 1) {
-                try{
-                 registerPolicy();
-                } catch (valuePremiumException e) {
-                    System.out.println(e.getMessage());
-                }
-            } else if (option == 2) {
-                listPolicies();
-            } else if (option == 3) {
-                calculateTotalPremiums();
-            } else if (option == 4) {
-                countAboveValue();
-            } else if (option == 5) {
-                listExistingCategories();
-            } else if(option == 6){
-                try{
+            switch (option) {
+                case 1:
+                    try {
+                        registerPolicy();
+                    } catch (valuePremiumException e) {
+                        System.out.println(e.getMessage());
+                    }
+                    break;
+                case 2:
+                    listPolicies();
+                    break;
+                case 3:
+                    calculateTotalPremiums();
+                    break;
+                case 4:
+                    countAboveValue();
+                    break;
+                case 5:
+                    listExistingCategories();
+                    break;
+                case 6:
                     removePolicy();
-                }catch (valuePremiumException e){
-                    System.out.println(e.getMessage());
-                }
-            }else if(option == 7){
-                listPoliciesByCategory();
-            }else if (option == 8) {
-                System.out.println("Exiting system...");
-            } else {
-                System.out.println("Invalid option...");
+                    break;
+                case 7:
+                    listPoliciesByCategory();
+                    break;
+                case 8:
+                    totalPremiumsByCategory();
+                    break;
+                case 9:
+                    categoryWithMostPolicies();
+                    break;
+                case 10:
+                    System.out.println("Exiting system...");
+                    break;
+                default:
+                    System.out.println("Invalid option...");
             }
-        } while (option != 8);
+        } while (option != 10);
     }
 
     static void registerPolicy(){
@@ -127,4 +140,38 @@ public class PolicyManagement3 {
             System.out.println("Category invalid...");
         }
     }
+
+    static void totalPremiumsByCategory(){
+        Set<String> categories = policiesByCategory.keySet();
+        for (String category : categories){
+            double total = 0;
+            for(Policy3 p : policiesByCategory.get(category)){
+                total += p.getPremiumValue();
+            }
+            System.out.println(category + ": " + total);
+        }
+    }
+
+    static void categoryWithMostPolicies() {
+        double maiorTamanho = 0;
+        String categoryHigh = null;
+
+        for (String category : policiesByCategory.keySet()) {
+            int quantidade = policiesByCategory.get(category).size();
+
+            if (quantidade > maiorTamanho) {
+                maiorTamanho = quantidade;
+                categoryHigh = category;
+
+            }
+        }
+        if (categoryHigh == null) {
+            System.out.println("No policies registered.");
+
+        } else {
+            System.out.println("Category with most policies: "
+                    + categoryHigh + " (" + maiorTamanho + ")");
+        }
+    }
+
 }
